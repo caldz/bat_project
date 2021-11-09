@@ -4,7 +4,7 @@ REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
 REM 配置平台
 
-set platform=prolin
+set platform=ndk
 
 REM 基本配置区
 if "%platform%"=="prolin" (
@@ -24,7 +24,9 @@ if "%platform%"=="prolin" (
 ) else if "%platform%"=="ndk" (
 REM NDK
 	echo platform=%platform%
-	pause
+	set make_dir=..
+	REM call :func_ndk_cal_var
+	call :func_ndk_main %*
 )
 goto:eof
 
@@ -35,6 +37,7 @@ REM 函数区======================================
 	if errorlevel 2 goto:eof
 	pause
 goto:eof
+
 :func_prolin_config
 	set prj_dir=..\..
 	set sdk_dir=D:\software\SDK\prolin
@@ -42,30 +45,24 @@ goto:eof
 	set com_index=5
 	set bin_name=
 goto:eof
-:func_ndk_config
-goto:eof
-REM input<prj_dir,zip,bin_name,output_zip,zip_file_list>
-:func_prolin_pack
-	set fv_zip_files_list=%5 %6 %7 %8 %9
-	del /q %output_zip%
+
+REM input<%1:prj_dir %2:loader_dir %3:sdk_dir>
+REM output<xcb,zip,output_zip,>
+:func_prolin_cal_var
 	set fv_cur_dir=%cd%
 	cd %1
-		@echo on
-		%2 a -r -tzip %output_zip% %fv_zip_files_list%
-		@echo off
+	set fv_prj_dir=%cd%
 	cd %fv_cur_dir%
-goto:eof
-
-:func_prolin_xcb_op
-	%xcb% connect com:COM%com_index%
-	%xcb% %*
-goto:eof
-
-:func_prolin_build
-set fv_cur_dir=%cd%
-cd %make_dir%
-%make% %1
-cd %fv_cur_dir%
+	if "%bin_name%"=="" (
+		for %%i in (%fv_prj_dir%) do (set bin_name=%%~nxi)
+	)
+	set xcb=%loader_dir%\tools\xcb
+	set zip=%loader_dir%\tools\7za
+	set output_zip=%fv_prj_dir%\pkg\%bin_name%.aip
+	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\
+	set zip_add_files_list=appinfo .\default\%bin_name%
+	set make=%sdk_dir%\sdk\tools\msys\bin\make
+	set make_dir=%prj_dir%\default
 goto:eof
 
 :func_prolin_main
@@ -104,27 +101,60 @@ goto:eof
 	)
 goto:eof
 
-REM input<%1:prj_dir %2:loader_dir %3:sdk_dir>
-REM output<xcb,zip,output_zip,>
-:func_prolin_cal_var
+
+REM input<prj_dir,zip,bin_name,output_zip,zip_file_list>
+:func_prolin_pack
+	set fv_zip_files_list=%5 %6 %7 %8 %9
+	del /q %output_zip%
 	set fv_cur_dir=%cd%
 	cd %1
-	set fv_prj_dir=%cd%
+		@echo on
+		%2 a -r -tzip %output_zip% %fv_zip_files_list%
+		@echo off
 	cd %fv_cur_dir%
-	if "%bin_name%"=="" (
-		for %%i in (%fv_prj_dir%) do (set bin_name=%%~nxi)
-	)
-	set xcb=%loader_dir%\tools\xcb
-	set zip=%loader_dir%\tools\7za
-	set output_zip=%fv_prj_dir%\pkg\%bin_name%.aip
-	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\
-	set zip_add_files_list=appinfo .\default\%bin_name%
-	set make=%sdk_dir%\sdk\tools\msys\bin\make
-	set make_dir=%prj_dir%\default
+goto:eof
+
+:func_prolin_xcb_op
+	%xcb% connect com:COM%com_index%
+	%xcb% %*
+goto:eof
+
+:func_prolin_build
+set fv_cur_dir=%cd%
+cd %make_dir%
+%make% %1
+cd %fv_cur_dir%
 goto:eof
 
 
 
+:func_ndk_config
+goto:eof
+:func_ndk_cal_var
+goto:eof
+
+:func_ndk_main
+	if "%1"=="make" (
+		REM 编译
+		call :func_ndk_build
+	) else if "%1"=="clean" (
+		REM 清空编译产物
+		call :func_ndk_build clean
+	) else if "%1"=="block" (
+		REM 卡住信息
+		call :func_timeout_block
+	) else (
+		REM 默认仅编译
+		call :func_ndk_build
+	)
+goto:eof
+
+:func_ndk_build
+	set fv_cur=%cd%
+	cd %make_dir%
+	call ndk-build.cmd %1
+	cd %fv_cur%
+goto:eof
 
 :func_ndk_vmc_load
 	if not "%1"=="" (set fv_ndk_vmc_prj_dir=%1) else (set fv_ndk_vmc_prj_dir=%ndk_vmc_dir%)
