@@ -2,12 +2,23 @@
 REM 首先要配置脚本所在工程的平台
 REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
-配置平台
+REM 配置平台
+
 set platform=prolin
+
+REM 基本配置区
+if "%platform%"=="prolin" (
+	call :func_prolin_config
+) else if "%platform%"=="ndk" (
+	call :func_ndk_config
+) else (
+	echo "incorrect platform:%platform%"
+	pause
+	goto:eof
+)
 
 REM PROLIN区
 if "%platform%"=="prolin" (
-	call :func_prolin_config
 	call :func_prolin_cal_var %prj_dir% %loader_dir% %sdk_dir%
 	call :func_prolin_main %*
 ) else if "%platform%"=="ndk" (
@@ -24,15 +35,15 @@ REM 函数区======================================
 	if errorlevel 2 goto:eof
 	pause
 goto:eof
-
 :func_prolin_config
-	if "%prj_dir%"=="" set prj_dir=..\..
+	set prj_dir=..\..
 	set sdk_dir=D:\software\SDK\prolin
 	set loader_dir=D:\software\tool\pax\TermAssist
 	set com_index=5
 	set bin_name=
 goto:eof
-
+:func_ndk_config
+goto:eof
 REM input<prj_dir,zip,bin_name,output_zip,zip_file_list>
 :func_prolin_pack
 	set fv_zip_files_list=%5 %6 %7 %8 %9
