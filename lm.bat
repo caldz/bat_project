@@ -2,17 +2,12 @@
 REM 首先要配置脚本所在工程的平台
 REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
-if "%platform%"=="" set platform=prolin
-REM PROLIN参数配置区=========测试发现，变量设置最好不要加上条件，不然点击脚本运行时可能会导致错乱
-if "%prj_dir%"=="" set prj_dir=..\..
-set sdk_dir=D:\software\SDK\prolin
-set loader_dir=D:\software\tool\pax\TermAssist
-set com_index=5
-set bin_name=
-REM PROLIN参数配置区---------
+配置平台
+set platform=prolin
 
 REM PROLIN区
 if "%platform%"=="prolin" (
+	call :func_prolin_config
 	call :func_prolin_cal_var %prj_dir% %loader_dir% %sdk_dir%
 	call :func_prolin_main %*
 ) else if "%platform%"=="ndk" (
@@ -28,6 +23,14 @@ REM 函数区======================================
 	choice /t 5 /d n /m "press y to lock the message, n or 5s timeout to exit"
 	if errorlevel 2 goto:eof
 	pause
+goto:eof
+
+:func_prolin_config
+	if "%prj_dir%"=="" set prj_dir=..\..
+	set sdk_dir=D:\software\SDK\prolin
+	set loader_dir=D:\software\tool\pax\TermAssist
+	set com_index=5
+	set bin_name=
 goto:eof
 
 REM input<prj_dir,zip,bin_name,output_zip,zip_file_list>
