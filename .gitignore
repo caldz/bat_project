@@ -2,5 +2,6 @@
 *
 !*.bat
 !.gitignore
+!git-bat
 BAT-remote-compile-copy-mdb-library.bat
 BAT-compile-allrely+pack+load+log.bat
