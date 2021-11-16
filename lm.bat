@@ -13,6 +13,7 @@ if "%platform%"=="prolin" (
 	call :func_prolin_main %*
 ) else if "%platform%"=="ndk" (
 REM NDK
+	REM echo platform=%platform%
 	set make_dir=..
 	call :func_ndk_config
 	call :func_ndk_cal_var
@@ -138,17 +139,27 @@ goto:eof
 
 :func_ndk_main
 	if "%1"=="make" (
-		REM 编译
 		call :func_ndk_build
 	) else if "%1"=="clean" (
-		REM 清空编译产物
 		call :func_ndk_build clean
 	) else if "%1"=="block" (
-		REM 卡住信息
 		call :func_timeout_block
 	) else (
 		REM 默认仅编译
 		REM call :func_ndk_build
+		call :func_ndk_build
+	)
+goto:eof
+
+:func_ndk_vmc_main
+	if "%1"=="make" (
+		call :func_ndk_build
+	) else if "%1"=="clean" (
+		call :func_ndk_build clean
+	) else if "%1"=="block" (
+		call :func_timeout_block
+	) else (
+		call :func_ndk_build
 	)
 goto:eof
 
