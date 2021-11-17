@@ -145,9 +145,7 @@ goto:eof
 	) else if "%1"=="block" (
 		call :func_timeout_block
 	) else (
-		REM 默认仅编译
-		REM call :func_ndk_build
-		call :func_ndk_build
+		echo "no match command"
 	)
 goto:eof
 
@@ -159,7 +157,7 @@ goto:eof
 	) else if "%1"=="block" (
 		call :func_timeout_block
 	) else (
-		call :func_ndk_build
+		echo "no match command"
 	)
 goto:eof
 
