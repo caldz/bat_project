@@ -51,7 +51,7 @@ REM output<xcb,zip,output_zip,>
 	set xcb=%loader_dir%\tools\xcb
 	set zip=%loader_dir%\tools\7za
 	set output_zip=%fv_prj_dir%\pkg\%bin_name%.aip
-	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\
+	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\ lib_a
 	set zip_add_files_list=appinfo .\default\%bin_name%
 	set make=%sdk_dir%\sdk\tools\msys\bin\make
 	set make_dir=%prj_dir%\default
