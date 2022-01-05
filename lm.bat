@@ -2,7 +2,7 @@
 REM 首先要配置脚本所在工程的平台
 REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
-set platform=ndk
+set platform=prolin
 set output=library
 
 
@@ -51,7 +51,7 @@ REM output<xcb,zip,output_zip,>
 	set xcb=%loader_dir%\tools\xcb
 	set zip=%loader_dir%\tools\7za
 	set output_zip=%fv_prj_dir%\pkg\%bin_name%.aip
-	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\
+	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\ lib_a
 	set zip_add_files_list=appinfo .\default\%bin_name%
 	set make=%sdk_dir%\sdk\tools\msys\bin\make
 	set make_dir=%prj_dir%\default
