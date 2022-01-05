@@ -2,7 +2,7 @@
 REM 首先要配置脚本所在工程的平台
 REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
-set platform=ndk
+set platform=prolin
 set output=library
 
 
