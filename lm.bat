@@ -2,7 +2,7 @@
 REM 首先要配置脚本所在工程的平台
 REM 然后再去不同平台的 func_xx_config 函数去做更细致的配置
 
-set platform=ndk
+set platform=prolin
 set output=library
 
 
@@ -32,7 +32,7 @@ REM 一般不同环境都需要配置一遍
 	set prj_dir=..\..
 	set sdk_dir=D:\software\SDK\prolin
 	set loader_dir=D:\software\tool\pax\TermAssist
-	set com_index=5
+	set com_index=3
 	set bin_name=
 goto:eof
 
