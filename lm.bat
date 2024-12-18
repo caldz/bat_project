@@ -30,8 +30,8 @@ REM 配置区=======================================
 :func_prolin_config
 REM 一般不同环境都需要配置一遍
 	set prj_dir=..\..
-	set sdk_dir=D:\software\SDK\prolin
-	set loader_dir=D:\software\tool\pax\TermAssist
+	set sdk_dir=%PROLIN_SDK_DIR%
+	set loader_dir=%TERASSIST_DIR%
 	set com_index=3
 	set bin_name=
 goto:eof
@@ -51,10 +51,10 @@ REM output<xcb,zip,output_zip,>
 	set xcb=%loader_dir%\tools\xcb
 	set zip=%loader_dir%\tools\7za
 	set output_zip=%fv_prj_dir%\pkg\%bin_name%.aip
-	set zip_files_list=appinfo .\default\%bin_name% res\ data\ lib\ lib_a
+	set zip_files_list="appinfo .\default\%bin_name% res\ data\ lib\ lib_a\ bin\"
 	set zip_add_files_list=appinfo .\default\%bin_name%
 	set make=%sdk_dir%\sdk\tools\msys\bin\make
-	set make_dir=%prj_dir%\default
+	set make_dir=..
 goto:eof
 REM 配置区---------------------------------------
 
@@ -108,10 +108,11 @@ goto:eof
 
 REM input<prj_dir,zip,bin_name,output_zip,zip_file_list>
 :func_prolin_pack
-	set fv_zip_files_list=%5 %6 %7 %8 %9
+	set fv_zip_files_list=%~5
 	del /q %output_zip%
 	set fv_cur_dir=%cd%
 	cd %1
+		echo %cd% %fv_zip_files_list%
 		@echo on
 		%2 a -r -tzip %output_zip% %fv_zip_files_list%
 		@echo off

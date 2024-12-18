@@ -21,6 +21,7 @@ set dir_list=%prj_dir%\doc ^
 	)
 	echo package_file_list=%final_list%
 	set tag=%product_name%_%product_ver%
+	echo %tag% "%final_list%"
 	call :func_pack_files %tag% "%final_list%"
 	pause
 goto :eof
